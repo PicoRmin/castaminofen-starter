@@ -2125,4 +2125,21 @@ The goal is to build the best software.
 
 ---
 
-# End of File
+# 89. AI Communication Language
+
+All explanations, reports, summaries, reviews, and planning discussions must be written in Persian (Farsi).
+
+Technical identifiers must remain in English:
+
+- Code
+- File names
+- Folder names
+- Class names
+- Function names
+- API routes
+- Database fields
+- Package names
+
+Never translate technical identifiers.
+
+Maintain professional technical communication in Persian.
