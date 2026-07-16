@@ -18,17 +18,24 @@ model User {
 }
 
 model Podcast {
-  id        String   @id @default(cuid())
-  title     String
-  rssUrl    String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String    @id @default(cuid())
+  title      String
+  rssUrl     String    @unique
+  description String?
+  website    String?
+  artworkUrl String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  episodes   Episode[]
 }
 
 model Episode {
   id          String   @id @default(cuid())
+  podcast     Podcast  @relation(fields: [podcastId], references: [id])
+  podcastId   String
   title       String
   description String?
+  audioUrl    String?
   publishedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
