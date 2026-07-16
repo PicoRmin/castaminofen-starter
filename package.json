@@ -1,0 +1,15 @@
+{
+  "name": "castaminofen",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "dev:web": "pnpm --filter @castaminofen/web dev",
+    "dev:api": "pnpm --filter @castaminofen/api start:dev",
+    "build": "pnpm --filter @castaminofen/shared-types build && pnpm --filter @castaminofen/web build && pnpm --filter @castaminofen/api build",
+    "lint": "pnpm --filter @castaminofen/web lint"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.1"
+  }
+}
