@@ -59,6 +59,8 @@
 ## 9. وضعیت فاز 2.7.1
 - فاز 2.7.1 — Auth Feature Boundary Adoption با موفقیت اجرا شد.
 - مرز مالکیت auth در سطح فرانت‌اند به‌صورت تدریجی و بدون تغییر رفتار یا قرارداد API تثبیت شد.
+- مستندات معماری و ساختارFolder نیز با این مرز هم‌ساز شده‌اند تا ownership auth در سطح feature و shared به‌روشنی توصیف شود.
 - lint و build برای ریپو با موفقیت اجرا شدند.
 - اعتبارسنجی runtime auth به دلیل نبود DATABASE_URL محلی در این محیط محدود ماند.
+- این فاز در محدوده‌ی documentation alignment follow-up باقی ماند و هیچ تغییر runtime، route یا API contract ایجاد نکرد.
 

@@ -44,6 +44,13 @@ Next.js Web (Mobile-First)  <---->  NestJS API (Feature-Based)
 - Episodes
 - Future features (player، offline، playlist و غیره)
 
+### Auth Feature Boundary Adoption (Phase 2.7.1)
+مرز مالکیت auth در سطح فرانت‌اند به‌صورت تدریجی و بدون تغییر رفتار runtime یا قرارداد API تثبیت شده است. بر اساس مدل فعلی:
+
+- لایه‌ی feature مسئول composition UI مرتبط با auth است؛ شامل کامپوننت‌های login، register، protected-route و ترکیب صفحه‌های auth در سطح feature.
+- لایه‌ی shared/application مسئول زیرساخت‌های مشترک auth است؛ شامل API client، ذخیره‌سازی توکن، state سشن و plumbing عمومی auth که در چند feature قابل استفاده است.
+- این مرز، یک مهاجرت کامل به auth logic feature-owned نیست؛ بلکه یک مدل incremental و قابل‌قبول برای MVP است که وابستگی‌های غیرضروری را کاهش می‌دهد و در عین حال زیرساخت مشترک را قابل استفاده نگه می‌دارد.
+
 > نکته مهم: فازهای foundation 2.5 و 2.6 فقط لایه‌ی زیرساخت و الگوهای مشترک را تقویت کرده‌اند. آن‌ها به‌هیچ‌وجه featureهای MVP فعلی را حذف نکرده‌اند. در واقع، auth، podcast و episode در همین ریپو به‌صورت فعال وجود دارند و با foundation layer هم‌پوشانی دارند.
 
 ---

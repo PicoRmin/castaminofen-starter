@@ -62,6 +62,23 @@ apps/web/
 - shared lib برای API client، env، errors و React Query
 - shared infrastructure برای استفاده‌ی مشترک در featureها
 
+### مرز feature auth در apps/web/src/features/auth
+
+در این نسخه، auth به‌صورت یک feature boundary مشخص در فرانت‌اند مستند شده است. ساختار فعلی شامل:
+
+- کامپوننت‌های feature-owned برای login و register در [apps/web/src/features/auth](../apps/web/src/features/auth)
+- composition صفحه‌های auth در سطح feature برای routeهای مرتبط
+- protected-route feature composition برای نگه داشتن entry points auth در لایه‌ی feature
+
+در مقابل، زیرساخت‌های مشترک auth همچنان در لایه‌ی shared/application باقی می‌مانند، از جمله:
+
+- API client abstraction
+- token persistence و session plumbing
+- stateهای سشن و auth عمومی
+- utilities auth که در چند feature قابل استفاده‌اند
+
+این مرز، هدفمند و incremental است و به‌معنای مهاجرت کامل auth logic به feature layer در این فاز نیست.
+
 ---
 
 ## ساختار Backend فعلی (apps/api)
