@@ -2749,3 +2749,6 @@ The response must contain:
 
 Do not output long technical reports only in chat.
 Store detailed reports inside docs/ first.
+
+
+Before starting any new Phase, run Project Rules Audit and confirm no RED issues exist.

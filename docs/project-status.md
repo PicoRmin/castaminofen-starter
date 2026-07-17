@@ -15,6 +15,7 @@
 - Phase 2.3 — Episode Audio Storage: endpoint آپلود audio و StorageService اضافه شد.
 - Phase 2.4.1 — Frontend Infrastructure: زیرساخت React Query، Zustand، لایه API و تایپ‌های مشترک frontend تکمیل شد.
 - Phase 2.4.2 — Authentication UI: صفحه‌های login، register و profile با اتصال به API و مدیریت protected route پیاده‌سازی شدند.
+- Phase 2.4.2 — Backend Build Fix: خطاهای TypeScript build backend با بررسی و بازسازی تایپ‌های Prisma برطرف شد و سرویس‌های User، Podcast و Episode مجدداً کامپایل شدند.
 
 **۳. فاز فعال فعلی**
 - وضعیت: Phase 2.4.2 تکمیل شد.
@@ -26,6 +27,7 @@
 - همگام‌سازی Zustand auth store با وضعیت session و hydrated بودن.
 - به‌روزرسانی `ProtectedRoute` و صفحه‌ی profile برای حفاظت از مسیرهای حساس.
 - اجرای build و lint وب و تأیید موفقیت آن.
+- رفع خطاهای build backend و تأیید موفقیت build و lint برای پنل API.
 
 **۵. کارهای معوق (Pending tasks)**
 - اضافه کردن مدیریت بهتر refresh token و وضعیت session در سطح UI.
