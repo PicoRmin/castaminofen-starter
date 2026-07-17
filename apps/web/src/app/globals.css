@@ -169,4 +169,30 @@
   .text-caption {
     @apply text-xs leading-6 text-text-secondary;
   }
+
+  .app-shell {
+    @apply min-h-screen bg-surface-primary text-text-primary;
+  }
+
+  .app-shell__content {
+    @apply pb-24;
+  }
+
+  .app-header {
+    @apply sticky top-0 z-30 border-b border-border bg-surface-secondary backdrop-blur-xl;
+    background-color: rgba(26, 26, 29, 0.95);
+  }
+
+  .bottom-navigation {
+    @apply fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface-secondary backdrop-blur-xl;
+    background-color: rgba(26, 26, 29, 0.95);
+  }
+
+  .bottom-navigation__item {
+    @apply flex min-h-[3rem] flex-1 flex-col items-center justify-center gap-2 rounded-2xl border border-transparent bg-transparent px-2 py-2 text-center text-xs font-medium text-text-secondary transition hover:border-border hover:bg-surface-primary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-secondary;
+  }
+
+  .icon-button {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface-primary text-text-primary transition hover:bg-surface-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-secondary;
+  }
 }

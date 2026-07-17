@@ -21,6 +21,8 @@
 - Phase 2.4.4 — Repository Stabilization & Documentation Alignment: حفاظت از فایل‌های محیطی، هم‌سویی مستندات با ساختار واقعی ریپو و آماده‌سازی برای بررسی سلامت کلی مخزن انجام شد.
 - Phase 2.5.1 — Frontend Foundation Setup: استقرار پایه‌ی Tailwind/PostCSS، tokens استایل، فونت Vazirmatn، و provider wrapper اولیه برای وب انجام شد.
 - Phase 2.5.2 — Design System Foundation: پایه‌ی سیستم طراحی با tokens متمرکز، استایل‌های مشترک RTL، و کامپوننت‌های بازاستفاده‌پذیر UI برای دکمه، ورودی، کارت، badge، avatar، loading/error و empty state پیاده‌سازی شد.
+- Phase 2.5.3 — Application Shell Foundation: اسکلت برنامه‌ی موبایل‌محور با AppShell، Header، MobileContainer و BottomNavigation ایجاد شد.
+- Phase 2.5.4 — Frontend Infrastructure Foundation: لایه‌ی API مشترک، پیکربندی محیطی عمومی، تنظیمات React Query قابل‌استفاده مجدد و ابزارهای مدیریت خطا برای frontend اضافه شد.
 
 **۳. فاز فعال فعلی**
 - وضعیت: Phase 2.4.4 تکمیل شد.
