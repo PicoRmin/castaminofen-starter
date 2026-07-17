@@ -5,6 +5,7 @@ export class CreatePodcastDto {
   title: string;
 
   @IsString()
+  @IsUrl()
   rssUrl: string;
 
   @IsOptional()

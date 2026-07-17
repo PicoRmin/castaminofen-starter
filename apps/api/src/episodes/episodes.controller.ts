@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GetUser } from '../common/decorators/get-user.decorator';
 
 @Controller('episodes')
 export class EpisodesController {
   constructor(private episodesService: EpisodesService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() dto: CreateEpisodeDto) {
-    return this.episodesService.create(dto);
+  create(@GetUser('id') userId: string, @Body() dto: CreateEpisodeDto) {
+    return this.episodesService.create(userId, dto);
   }
 
   @Get()
@@ -22,13 +25,15 @@ export class EpisodesController {
     return this.episodesService.findById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateEpisodeDto) {
-    return this.episodesService.update(id, dto);
+  update(@GetUser('id') userId: string, @Param('id') id: string, @Body() dto: UpdateEpisodeDto) {
+    return this.episodesService.update(id, userId, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.episodesService.remove(id);
+  remove(@GetUser('id') userId: string, @Param('id') id: string) {
+    return this.episodesService.remove(id, userId);
   }
 }

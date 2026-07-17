@@ -15,6 +15,7 @@ model User {
   hashedRefreshToken String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  podcasts  Podcast[]
 }
 
 model Podcast {
@@ -24,6 +25,8 @@ model Podcast {
   description String?
   website    String?
   artworkUrl String?
+  ownerId    String?
+  owner      User?     @relation(fields: [ownerId], references: [id])
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   episodes   Episode[]
