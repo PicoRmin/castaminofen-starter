@@ -1,5 +1,4 @@
 import { Play, Pause } from 'lucide-react';
-import type { ChangeEvent } from 'react';
 import { useState, useRef } from 'react';
 
 export function AudioPlayer({ audioUrl, title }: { audioUrl: string; title: string }) {

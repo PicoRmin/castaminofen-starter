@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import { useState, useEffect } from 'react';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 const podcastSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -29,7 +30,9 @@ export default function EditPodcastPage() {
   const podcastId = params?.id as string;
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const query = useQuery(['podcast', podcastId], () => getPodcastById(podcastId), {
+  const query = useQuery({
+    queryKey: ['podcast', podcastId],
+    queryFn: () => getPodcastById(podcastId),
     enabled: Boolean(podcastId),
   });
   const form = useForm<PodcastFormValues>({
@@ -74,10 +77,11 @@ export default function EditPodcastPage() {
   }
 
   return (
-    <main className="page-container">
-      <section className="card">
-        <h1>Edit Podcast</h1>
-        <Form onSubmit={form.handleSubmit(onSubmit)}>
+    <ProtectedRoute>
+      <main className="page-container">
+        <section className="card">
+          <h1>Edit Podcast</h1>
+          <Form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField>
             <FormLabel htmlFor="title">Title</FormLabel>
             <Input id="title" {...form.register('title')} />
@@ -104,8 +108,9 @@ export default function EditPodcastPage() {
           </FormField>
           {error && <p className="error-text">{error}</p>}
           <Button type="submit">Save Changes</Button>
-        </Form>
-      </section>
-    </main>
+          </Form>
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 }

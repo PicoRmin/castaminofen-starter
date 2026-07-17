@@ -7,11 +7,14 @@ import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
+import type { Episode } from '@/lib/types';
 
 export default function PodcastDetailsPage() {
   const params = useParams();
   const podcastId = params?.id as string;
-  const query = useQuery(['podcast', podcastId], () => getPodcastById(podcastId), {
+  const query = useQuery({
+    queryKey: ['podcast', podcastId],
+    queryFn: () => getPodcastById(podcastId),
     enabled: Boolean(podcastId),
   });
 
@@ -50,7 +53,7 @@ export default function PodcastDetailsPage() {
             <h2>Episodes</h2>
             {query.data.episodes?.length ? (
               <div className="field-row">
-                {query.data.episodes.map((episode) => (
+                {query.data.episodes.map((episode: Episode) => (
                   <Card key={episode.id} className="card">
                     <h3>{episode.title}</h3>
                     <p>{episode.description || 'No description'}</p>

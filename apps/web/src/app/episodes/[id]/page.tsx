@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { getEpisodeById, uploadEpisodeAudio } from '@/lib/episodes';
@@ -15,13 +16,16 @@ export default function EpisodeDetailsPage() {
   const queryClient = useQueryClient();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const query = useQuery(['episode', episodeId], () => getEpisodeById(episodeId), {
+  const query = useQuery({
+    queryKey: ['episode', episodeId],
+    queryFn: () => getEpisodeById(episodeId),
     enabled: Boolean(episodeId),
   });
 
-  const uploadMutation = useMutation((file: File) => uploadEpisodeAudio(episodeId, file), {
+  const uploadMutation = useMutation({
+    mutationFn: (file: File) => uploadEpisodeAudio(episodeId, file),
     onSuccess: () => {
-      queryClient.invalidateQueries(['episode', episodeId]);
+      queryClient.invalidateQueries({ queryKey: ['episode', episodeId] });
     },
   });
 
@@ -45,8 +49,9 @@ export default function EpisodeDetailsPage() {
   };
 
   return (
-    <main className="page-container">
-      <section className="card">
+    <ProtectedRoute>
+      <main className="page-container">
+        <section className="card">
         <div className="header">
           <div>
             <h1>{query.data.title}</h1>
@@ -87,16 +92,17 @@ export default function EpisodeDetailsPage() {
                 type="button"
                 variant="primary"
                 onClick={handleUpload}
-                disabled={!selectedFile || uploadMutation.isLoading}
+                disabled={!selectedFile || uploadMutation.isPending}
               >
-                {uploadMutation.isLoading ? 'Uploading...' : 'Upload Audio'}
+                {uploadMutation.isPending ? 'Uploading...' : 'Upload Audio'}
               </Button>
               {uploadMutation.isError && <p className="error-text">{uploadMutation.error?.message ?? 'Upload failed'}</p>}
               {uploadMutation.isSuccess && <p className="form-message">Audio uploaded successfully.</p>}
             </div>
           </Card>
         </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 }

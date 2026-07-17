@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 const podcastSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -36,10 +37,11 @@ export default function NewPodcastPage() {
   }
 
   return (
-    <main className="page-container">
-      <section className="card">
-        <h1>New Podcast</h1>
-        <Form onSubmit={form.handleSubmit(onSubmit)}>
+    <ProtectedRoute>
+      <main className="page-container">
+        <section className="card">
+          <h1>New Podcast</h1>
+          <Form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField>
             <FormLabel htmlFor="title">Title</FormLabel>
             <Input id="title" {...form.register('title')} />
@@ -64,8 +66,9 @@ export default function NewPodcastPage() {
           </FormField>
           {error && <p className="error-text">{error}</p>}
           <Button type="submit">Create Podcast</Button>
-        </Form>
-      </section>
-    </main>
+          </Form>
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 }

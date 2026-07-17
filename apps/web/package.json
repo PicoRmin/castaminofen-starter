@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@castaminofen/shared-types": "workspace:*",
     "@hookform/resolvers": "^5.4.0",
     "@tanstack/react-query": "^5.101.2",
     "clsx": "^2.1.1",

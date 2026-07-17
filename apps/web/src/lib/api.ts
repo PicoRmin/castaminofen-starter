@@ -1,12 +1,24 @@
 import { getAccessToken } from './auth-token';
 
+export class ApiError extends Error {
+  status: number;
+  payload: unknown;
+
+  constructor(message: string, status: number, payload?: unknown) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.payload = payload;
+  }
+}
+
 export interface ApiFetchOptions extends Omit<RequestInit, 'body' | 'headers'> {
   body?: unknown;
   query?: Record<string, string | number | boolean | null | undefined>;
+  headers?: Record<string, string>;
 }
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ?? 'http://localhost:3001/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') ?? 'http://localhost:3001/api/v1';
 
 function buildUrl(path: string, query?: Record<string, unknown>) {
   const normalizedPath = path.replace(/^\//, '');
@@ -26,10 +38,16 @@ function buildUrl(path: string, query?: Record<string, unknown>) {
 
 async function parseJson(response: Response) {
   const text = await response.text();
+
   if (!text) {
     return null;
   }
-  return JSON.parse(text);
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
 }
 
 export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): Promise<T> {
@@ -39,7 +57,7 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
 
   const requestHeaders: Record<string, string> = {
     ...(body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-    ...(headers as Record<string, string>),
+    ...(headers ?? {}),
   };
 
   if (accessToken) {
@@ -53,15 +71,20 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
     credentials: 'include',
   });
 
+  const payload = await parseJson(response);
+
   if (!response.ok) {
-    const payload = await parseJson(response).catch(() => null);
-    const message = payload?.message || response.statusText;
-    throw new Error(message || `Request failed with status ${response.status}`);
+    const message =
+      typeof payload === 'object' && payload !== null && 'message' in payload
+        ? String((payload as { message?: string }).message)
+        : response.statusText;
+
+    throw new ApiError(message || `Request failed with status ${response.status}`, response.status, payload);
   }
 
   if (response.status === 204) {
     return {} as T;
   }
 
-  return (await parseJson(response)) as T;
+  return (payload as T) ?? ({} as T);
 }

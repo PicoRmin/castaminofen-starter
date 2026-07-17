@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import { useState } from 'react';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import type { PaginatedResponse, Podcast } from '@/lib/types';
 
 const episodeSchema = z.object({
   podcastId: z.string().min(1, 'Podcast is required'),
@@ -27,7 +29,10 @@ export default function NewEpisodePage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const form = useForm<EpisodeFormValues>({ resolver: zodResolver(episodeSchema) });
-  const podcastsQuery = useQuery(['podcasts'], () => getPodcasts({ page: 1, limit: 50, sort: 'newest' }));
+  const podcastsQuery = useQuery<PaginatedResponse<Podcast>, Error>({
+    queryKey: ['podcasts'],
+    queryFn: () => getPodcasts({ page: 1, limit: 50, sort: 'newest' }),
+  });
 
   async function onSubmit(values: EpisodeFormValues) {
     setError(null);
@@ -40,10 +45,11 @@ export default function NewEpisodePage() {
   }
 
   return (
-    <main className="page-container">
-      <section className="card">
-        <h1>New Episode</h1>
-        <Form onSubmit={form.handleSubmit(onSubmit)}>
+    <ProtectedRoute>
+      <main className="page-container">
+        <section className="card">
+          <h1>New Episode</h1>
+          <Form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField>
             <FormLabel htmlFor="podcastId">Podcast</FormLabel>
             {podcastsQuery.isLoading ? (
@@ -53,7 +59,7 @@ export default function NewEpisodePage() {
             ) : (
               <select id="podcastId" className="input" {...form.register('podcastId')}>
                 <option value="">Select a podcast</option>
-                {podcastsQuery.data?.data.map((podcast) => (
+                {podcastsQuery.data?.data.map((podcast: Podcast) => (
                   <option key={podcast.id} value={podcast.id}>
                     {podcast.title}
                   </option>
@@ -77,8 +83,9 @@ export default function NewEpisodePage() {
           </FormField>
           {error && <p className="error-text">{error}</p>}
           <Button type="submit">Create Episode</Button>
-        </Form>
-      </section>
-    </main>
+          </Form>
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 }

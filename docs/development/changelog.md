@@ -9,3 +9,6 @@
 | 2026-07-16 | Phase 2 - Podcast Core Planning | Create documentation and implementation plan for Podcast/Episode core expansion | انجام شده |
 | 2026-07-17 | Phase 2.2 - Podcast API Completion | Added podcast pagination, filtering, newest sorting, podcast detail with episodes, and validated podcast DTOs; backend build and lint passed | انجام شده |
 | 2026-07-17 | Phase 2.3 - Episode Audio Storage | Added episode audio upload endpoint, StorageService for MinIO-compatible uploads, file validation, and audioUrl integration | انجام شده |
+| 2026-07-17 | Phase 2.4 - Frontend Foundation | Added initial Next.js frontend foundation with React Query provider, API client utilities, auth/podcast/episode pages, and basic forms for create/edit flows | انجام شده |
+| 2026-07-17 | Phase 2.4.1 - Frontend Infrastructure | Strengthened React Query provider, Zustand stores, shared frontend types, API error handling, and verified web build/lint; resolved a TypeScript issue in the episode creation page | انجام شده |
+| 2026-07-17 | Phase 2.4.2 - Authentication UI | Implemented login, register, and profile pages with react-hook-form and zod validation, connected auth API endpoints, synced Zustand auth state, and added protected-route handling; verified web build and lint | انجام شده |

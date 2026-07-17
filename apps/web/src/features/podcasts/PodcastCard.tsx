@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import type { Podcast } from '@/lib/types';
 
 export function PodcastCard({ podcast }: { podcast: Podcast }) {
