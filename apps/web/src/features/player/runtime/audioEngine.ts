@@ -44,13 +44,14 @@ export function createBrowserAudioEngine(element?: HTMLAudioElement): AudioEngin
   }
 
   const listeners = new Set<(snapshot: AudioPlaybackSnapshot) => void>();
+  let pendingError: string | null = null;
 
   const notify = () => {
     const snapshot: AudioPlaybackSnapshot = {
       playbackStatus: audioElement.ended ? 'idle' : audioElement.paused ? 'paused' : 'playing',
       duration: audioElement.duration || 0,
       currentPosition: audioElement.currentTime,
-      error: null,
+      error: pendingError,
       isPlaying: !audioElement.paused && !audioElement.ended,
     };
 
@@ -58,30 +59,34 @@ export function createBrowserAudioEngine(element?: HTMLAudioElement): AudioEngin
   };
 
   const handleError = () => {
+    pendingError = 'Unable to load audio playback.';
     const snapshot: AudioPlaybackSnapshot = {
       playbackStatus: 'paused',
       duration: audioElement.duration || 0,
       currentPosition: audioElement.currentTime,
-      error: 'Unable to load audio playback.',
+      error: pendingError,
       isPlaying: false,
     };
 
     listeners.forEach((listener) => listener(snapshot));
   };
 
-  const events = ['play', 'pause', 'ended', 'timeupdate', 'loadedmetadata', 'canplay', 'error'] as const;
+  const events = ['play', 'pause', 'ended', 'timeupdate', 'loadedmetadata', 'canplay'] as const;
 
+  // Register normal playback notifications for non-error events
   events.forEach((eventName) => {
     audioElement.addEventListener(eventName, notify);
-    if (eventName === 'error') {
-      audioElement.addEventListener(eventName, handleError);
-    }
   });
+
+  // Register a dedicated error handler only for the "error" event to avoid
+  // sending a normal notify with a null error followed by an error snapshot.
+  audioElement.addEventListener('error', handleError);
 
   return {
     load(src) {
       if (src) {
         audioElement.src = src;
+        pendingError = null;
       }
 
       audioElement.load();
@@ -103,6 +108,7 @@ export function createBrowserAudioEngine(element?: HTMLAudioElement): AudioEngin
     stop() {
       audioElement.pause();
       audioElement.currentTime = 0;
+      pendingError = null;
       notify();
     },
     setVolume(volume) {
@@ -128,11 +134,10 @@ export function createBrowserAudioEngine(element?: HTMLAudioElement): AudioEngin
     destroy() {
       events.forEach((eventName) => {
         audioElement.removeEventListener(eventName, notify);
-        if (eventName === 'error') {
-          audioElement.removeEventListener(eventName, handleError);
-        }
       });
+      audioElement.removeEventListener('error', handleError);
       listeners.clear();
+      pendingError = null;
     },
   };
 }

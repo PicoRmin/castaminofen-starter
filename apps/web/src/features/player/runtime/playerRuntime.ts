@@ -17,6 +17,10 @@ export type PlayerRuntimeController = {
 };
 
 export function createPlayerRuntimeController(store: PlayerState, engine: AudioEngine = createBrowserAudioEngine()): PlayerRuntimeController {
+  // Token used to ignore outdated load/play completions when multiple
+  // rapid load/play requests happen. Incrementing this token makes earlier
+  // promises no-ops so they don't overwrite newer state.
+  let currentLoadToken = 0;
 
   const syncState = (snapshot?: { playbackStatus: PlayerPlaybackStatus; duration: number; currentPosition: number; error: string | null }) => {
     store.setPlaybackState({
@@ -42,6 +46,7 @@ export function createPlayerRuntimeController(store: PlayerState, engine: AudioE
   };
 
   const playItem = async (item: PlayableItem) => {
+    const loadToken = ++currentLoadToken;
     if (!item.audioUrl) {
       store.setCurrentItem(item);
       store.setPlaybackState({
@@ -68,6 +73,11 @@ export function createPlayerRuntimeController(store: PlayerState, engine: AudioE
 
     try {
       await engine.play();
+
+      // Ignore results from earlier loads/plays if another load started
+      // after this one.
+      if (loadToken !== currentLoadToken) return;
+
       store.setPlaybackState({
         currentItem: item,
         playbackStatus: 'playing',
@@ -76,6 +86,9 @@ export function createPlayerRuntimeController(store: PlayerState, engine: AudioE
         error: null,
       });
     } catch (error) {
+      // If a newer load has been requested, avoid overwriting state.
+      if (loadToken !== currentLoadToken) return;
+
       store.setPlaybackState({
         currentItem: item,
         playbackStatus: 'paused',
@@ -154,10 +167,18 @@ export function createPlayerRuntimeController(store: PlayerState, engine: AudioE
         return;
       }
 
+      const token = currentLoadToken;
+
       try {
         await engine.play();
+
+        // if a newer load started while we were waiting, ignore the result
+        if (token !== currentLoadToken) return;
+
         syncState();
       } catch (error) {
+        if (token !== currentLoadToken) return;
+
         store.setPlaybackState({
           playbackStatus: 'paused',
           duration: engine.getDuration(),

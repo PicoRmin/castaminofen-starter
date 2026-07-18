@@ -3,10 +3,10 @@
 import { usePlayerState } from '../hooks/usePlayerState';
 
 export function PlayerInfo() {
-  const { currentItem, status, error } = usePlayerState();
+  const { currentItem, playbackStatus, error } = usePlayerState();
 
   const title = currentItem?.title ?? 'No active playback';
-  const subtitle = currentItem?.subtitle ?? (status === 'loading' ? 'Preparing audio…' : status === 'idle' ? 'Choose an episode to start listening.' : 'Playback available');
+  const subtitle = currentItem?.subtitle ?? (playbackStatus === 'loading' ? 'Preparing audio…' : playbackStatus === 'idle' ? 'Choose an episode to start listening.' : 'Playback available');
 
   return (
     <div className="min-w-0">

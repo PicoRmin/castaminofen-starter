@@ -7,7 +7,7 @@ import { usePlayerState } from '../hooks/usePlayerState';
 
 export function PlayerControls() {
   const playerRuntime = usePlayerRuntime();
-  const { currentItem, status, isPlaying, queue, currentIndex, repeatMode, shuffleEnabled, toggleRepeat, toggleShuffle } = usePlayerState();
+  const { currentItem, playbackStatus, isPlaying, queue, currentIndex, repeatMode, shuffleEnabled, toggleRepeat, toggleShuffle } = usePlayerState();
 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex >= 0 && queue.length > 0 && (repeatMode === 'queue' || shuffleEnabled || currentIndex < queue.length - 1);
@@ -18,12 +18,12 @@ export function PlayerControls() {
       return;
     }
 
-    if (status === 'playing') {
+    if (playbackStatus === 'playing') {
       playerRuntime.pause();
       return;
     }
 
-    if (status === 'paused') {
+    if (playbackStatus === 'paused') {
       await playerRuntime.play();
       return;
     }
@@ -56,9 +56,9 @@ export function PlayerControls() {
         onClick={() => void handleTogglePlayback()}
         disabled={!hasPlayableItem}
         aria-label={isPlaying ? 'Pause playback' : 'Start playback'}
-        aria-busy={status === 'loading'}
+        aria-busy={playbackStatus === 'loading'}
       >
-        {status === 'loading' ? <span className="text-xs font-semibold">...</span> : isPlaying ? <Pause size={16} /> : <Play size={16} />}
+        {playbackStatus === 'loading' ? <span className="text-xs font-semibold">...</span> : isPlaying ? <Pause size={16} /> : <Play size={16} />}
       </Button>
       <Button
         type="button"
