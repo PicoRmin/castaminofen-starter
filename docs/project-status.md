@@ -1,6 +1,6 @@
 # گزارش تحویل پروژه — Castaminofen
 
-تاریخ: 2026-07-17
+تاریخ: 2026-07-18
 
 ## 1. وضعیت کنونی پروژه
 - مخزن مونو-ریپو با دو اپلیکیشن اصلی در [apps/api](../apps/api) و [apps/web](../apps/web) و بسته‌های مشترک در [packages](../packages) در حال نگهداری است.
@@ -149,4 +149,50 @@
 - کنترل playback در صفحه‌ی جزئیات اپیزود از مسئولیت مستقیم Episode حذف شد و از طریق Player Runtime و Playable Contract به‌عنوان اولین consumer واقعی اجرا شد.
 - صفحه‌ی اپیزود هنوز ساختار UI و جریان آپلود خود را حفظ کرد و فقط ownership playback به Player منتقل شد.
 - گزارش فاز در [docs/phases/phase-2.17-player-consumption-implementation-report.md](./phases/phase-2.17-player-consumption-implementation-report.md) ثبت شد.
+## 15. وضعیت فاز 2.18
+- فاز 2.18 — Player UI Foundation & Runtime Surface Migration با موفقیت اجرا شد.
+- Player به‌صورت یک feature مستقل با کامپوننت‌های UI برای info، controls، progress و volume در [apps/web/src/features/player/components](../apps/web/src/features/player/components) پیاده‌سازی شد.
+- PlayerBar در [apps/web/src/components/layout/app-shell.tsx](../apps/web/src/components/layout/app-shell.tsx) به‌عنوان surface پخش در بالای shell اضافه شد.
+- صفحه‌ی جزئیات اپیزود از نمایش کنترل‌های مستقیم playback پاک شد و فقط به metadata و workflow آپلود محدود شد.
+- اعتبارسنجی با build و lint وب انجام شد و بدون خطای بحرانی به پایان رسید.
 
+## 16. وضعیت فاز 2.19
+- فاز 2.19 — Player Integration Stabilization & Architecture Cleanup با موفقیت اجرا شد.
+- state مربوط به playback در [apps/web/src/features/player/store/playerStore.ts](../apps/web/src/features/player/store/playerStore.ts) به‌صورت کاملاً feature-owned نگه‌داری شد و وابستگی‌های انتقالی مرتبط با Episode از آن حذف شد.
+- کامپوننت legacy [apps/web/src/components/AudioPlayer.tsx](../apps/web/src/components/AudioPlayer.tsx) حذف شد تا تنها یک surface پخش از طریق Player feature در اپ باقی بماند.
+- رفتار runtime بدون تغییر باقی ماند و اعتبارسنجی با lint و build وب انجام شد.
+
+## 17. وضعیت فاز 3.0
+- فاز 3.0 — Playback Queue Foundation با موفقیت اجرا شد.
+- queue مالکیتی Player در [apps/web/src/features/player/store/playerStore.ts](../apps/web/src/features/player/store/playerStore.ts) اضافه شد و actions replaceQueue، clearQueue، goToNext و goToPrevious ارائه شدند.
+- runtime Player در [apps/web/src/features/player/runtime/playerRuntime.ts](../apps/web/src/features/player/runtime/playerRuntime.ts) با load/move بین آیتم‌ها یکپارچه شد و کنترل‌های Next/Previous در [apps/web/src/features/player/components/PlayerControls.tsx](../apps/web/src/features/player/components/PlayerControls.tsx) فعال شدند.
+- این تغییر بدون تغییر route، API contract یا ownership Episode انجام شد و با lint/build وب تأیید شد.
+
+## 18. وضعیت فاز 3.1
+- فاز 3.1 — Queue Auto-Advance & Playback Continuity با موفقیت اجرا شد.
+- Runtime Player حالا پایان پخش هر آیتم را تشخیص می‌دهد و به‌صورت خودکار به آیتم بعدی Queue می‌رود؛ در انتهای Queue نیز پخش به‌صورت graceful متوقف می‌شود.
+- مرز مالکیت Episode بدون تغییر باقی ماند و Audio Engine فقط رویدادهای پخش را گزارش می‌کند.
+- کنترل‌های Previous/Next اکنون با وضعیت Queue هماهنگ شده‌اند و validation با lint/build وب تأیید شد.
+
+## 19. وضعیت فاز 3.2
+- فاز 3.2 — Player Playback Modes Foundation Plan به‌صورت planning-only و بدون implementation ثبت شد.
+- هدف این فاز، تعریف مرز مالکیت Repeat/Shuffle در Player Runtime، محدود کردن scope به MVP، و مستندسازی ریسک‌ها و checklist validation برای اجرای بعدی است.
+- مستند فاز در [docs/phases/phase-3.2-player-playback-modes-plan.md](./phases/phase-3.2-player-playback-modes-plan.md) ثبت شده است.
+
+## 20. وضعیت فاز 3.2.1
+- فاز 3.2.1 — Repeat Mode Implementation با موفقیت اجرا شد.
+- حالت Repeat در Player Store به‌صورت off/one/queue پیاده‌سازی شد و Runtime Player تصمیم‌گیری پایان پخش را بر اساس این حالت انجام می‌دهد.
+- کنترل Repeat به UI Player اضافه شد و رفتار Repeat One/Queue در سطوح store و runtime تأیید شد.
+- اعتبارسنجی با regression test، lint و build وب انجام شد.
+
+## 21. وضعیت فاز 3.2.2
+- فاز 3.2.2 — Shuffle Mode MVP Implementation با موفقیت اجرا شد.
+- حالت Shuffle در Player Store به‌صورت Player-owned و بدون ایجاد store جدید پیاده‌سازی شد و actionهای setShuffle/toggleShuffle اضافه شدند.
+- انتخاب آیتم بعدی در flow runtime به‌صورت MVP بر اساس Shuffle انجام می‌شود و ترتیب Queue بدون تغییر باقی می‌ماند.
+- دکمه Shuffle به کنترل‌های موجود Player اضافه شد و رفتار آن با regression test، lint و build وب تأیید شد.
+
+## 22. وضعیت فاز 3.3
+- فاز 3.3 — Player Runtime Stabilization & UX Polish با موفقیت اجرا شد.
+- Runtime Player در برابر صف خالی، آیتم بدون audio source و انتقال‌های نامعتبر مقاوم‌تر شده و حالت‌های خطا و idle به‌صورت قابل‌فهم‌تر در state Player ثبت می‌شوند.
+- UI Player حالا وضعیت loading، empty و error را به‌صورت واضح‌تر نمایش می‌دهد و بدون تغییر در معماری یا ownership فعلی، تجربه پخش را پایدارتر می‌کند.
+- اعتبارسنجی با regression test، lint و build وب انجام شد.

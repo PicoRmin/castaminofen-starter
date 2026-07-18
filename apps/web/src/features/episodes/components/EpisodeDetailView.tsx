@@ -1,8 +1,4 @@
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { mapEpisodeToPlayableItem } from '@/features/player/adapters/episodeToPlayable';
-import { usePlayerRuntime } from '@/features/player/hooks/usePlayerRuntime';
-import { usePlayerState } from '@/features/player/hooks/usePlayerState';
 import type { Episode } from '@/lib/types';
 import { EpisodeAudioUploadCard } from './EpisodeAudioUploadCard';
 import type { ChangeEvent } from 'react';
@@ -26,36 +22,6 @@ export function EpisodeDetailView({
   uploadError,
   uploadSuccess,
 }: EpisodeDetailViewProps) {
-  const playerRuntime = usePlayerRuntime();
-  const playerState = usePlayerState();
-  const playableItem = mapEpisodeToPlayableItem(episode);
-  const isCurrentEpisode = playerState.currentItem?.id === episode.id;
-  const isPlaying = isCurrentEpisode && playerState.isPlaying;
-  const playbackLabel =
-    isCurrentEpisode && playerState.playbackStatus === 'loading'
-      ? 'Loading...'
-      : isPlaying
-        ? 'Pause'
-        : 'Play';
-
-  const handlePlaybackToggle = async () => {
-    if (!episode.audioUrl) {
-      return;
-    }
-
-    if (isCurrentEpisode && playerState.playbackStatus === 'playing') {
-      playerRuntime.pause();
-      return;
-    }
-
-    if (isCurrentEpisode && playerState.playbackStatus === 'paused') {
-      await playerRuntime.play();
-      return;
-    }
-
-    await playerRuntime.loadItem(playableItem);
-  };
-
   return (
     <main className="page-container">
       <section className="card">
@@ -77,14 +43,7 @@ export function EpisodeDetailView({
               <strong>Audio URL:</strong> {episode.audioUrl || 'Not uploaded'}
             </p>
             {episode.audioUrl ? (
-              <div className="mt-3 space-y-2">
-                <Button onClick={() => void handlePlaybackToggle()} variant="secondary" className="w-full sm:w-auto">
-                  {playbackLabel}
-                </Button>
-                <p className="form-message">
-                  {isCurrentEpisode ? `Playback status: ${playerState.playbackStatus}` : 'Player runtime is ready for playback.'}
-                </p>
-              </div>
+              <p className="form-message mt-3">Audio is available and can be played from the player surface in the app shell.</p>
             ) : (
               <p className="form-message">Audio is not available yet.</p>
             )}

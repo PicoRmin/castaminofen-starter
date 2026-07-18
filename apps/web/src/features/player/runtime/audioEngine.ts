@@ -23,8 +23,26 @@ export interface AudioEngine {
 
 const clampVolume = (value: number) => Math.min(1, Math.max(0, value));
 
+const createNoopAudioEngine = (): AudioEngine => ({
+  load() {},
+  async play() {},
+  pause() {},
+  stop() {},
+  setVolume() {},
+  setCurrentTime() {},
+  getCurrentTime() { return 0; },
+  getDuration() { return 0; },
+  subscribe() { return () => {}; },
+  destroy() {},
+});
+
 export function createBrowserAudioEngine(element?: HTMLAudioElement): AudioEngine {
-  const audioElement = element ?? new Audio();
+  const audioElement = element ?? (typeof window !== 'undefined' && typeof window.Audio !== 'undefined' ? new window.Audio() : undefined);
+
+  if (!audioElement) {
+    return createNoopAudioEngine();
+  }
+
   const listeners = new Set<(snapshot: AudioPlaybackSnapshot) => void>();
 
   const notify = () => {
