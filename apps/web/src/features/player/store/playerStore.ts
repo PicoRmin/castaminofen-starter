@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { PlayableItem, PlayerPlaybackStatus, PlayerRuntimeState } from '../types';
+import type { PlayableItem, PlayerPlaybackStatus, PlayerRepeatMode, PlayerRuntimeState } from '../types';
 
 export type PlayerState = {
   currentItem: PlayableItem | null;
@@ -13,7 +13,7 @@ export type PlayerState = {
   position: number;
   error: string | null;
   volume: number;
-  repeatMode: 'off' | 'one' | 'all';
+  repeatMode: PlayerRepeatMode;
   shuffle: boolean;
   setCurrentItem: (item: PlayableItem) => void;
   setPlaybackState: (state: Partial<PlayerRuntimeState>) => void;
@@ -110,11 +110,18 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     let nextItem: PlayableItem | null = null;
 
     set((state) => {
-      if (!state.queue.length || state.currentIndex >= state.queue.length - 1) {
+      if (!state.queue.length) {
         return state;
       }
 
-      const targetIndex = state.currentIndex + 1;
+      const isAtEnd = state.currentIndex >= state.queue.length - 1;
+      const shouldWrap = state.repeatMode === 'queue' && isAtEnd;
+
+      if (!shouldWrap && isAtEnd) {
+        return state;
+      }
+
+      const targetIndex = shouldWrap ? 0 : state.currentIndex + 1;
       nextItem = state.queue[targetIndex] ?? null;
 
       return {
@@ -159,7 +166,7 @@ export const usePlayerStore = create<PlayerState>((set) => ({
   setVolume: (volume) => set({ volume: clampVolume(volume) }),
   toggleRepeat: () =>
     set((state) => ({
-      repeatMode: state.repeatMode === 'off' ? 'all' : state.repeatMode === 'all' ? 'one' : 'off',
+      repeatMode: state.repeatMode === 'off' ? 'one' : state.repeatMode === 'one' ? 'queue' : 'off',
     })),
   toggleShuffle: () => set((state) => ({ shuffle: !state.shuffle })),
   resetPlayer: () =>

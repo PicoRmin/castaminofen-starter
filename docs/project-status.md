@@ -173,3 +173,14 @@
 - Runtime Player حالا پایان پخش هر آیتم را تشخیص می‌دهد و به‌صورت خودکار به آیتم بعدی Queue می‌رود؛ در انتهای Queue نیز پخش به‌صورت graceful متوقف می‌شود.
 - مرز مالکیت Episode بدون تغییر باقی ماند و Audio Engine فقط رویدادهای پخش را گزارش می‌کند.
 - کنترل‌های Previous/Next اکنون با وضعیت Queue هماهنگ شده‌اند و validation با lint/build وب تأیید شد.
+
+## 19. وضعیت فاز 3.2
+- فاز 3.2 — Player Playback Modes Foundation Plan به‌صورت planning-only و بدون implementation ثبت شد.
+- هدف این فاز، تعریف مرز مالکیت Repeat/Shuffle در Player Runtime، محدود کردن scope به MVP، و مستندسازی ریسک‌ها و checklist validation برای اجرای بعدی است.
+- مستند فاز در [docs/phases/phase-3.2-player-playback-modes-plan.md](./phases/phase-3.2-player-playback-modes-plan.md) ثبت شده است.
+
+## 20. وضعیت فاز 3.2.1
+- فاز 3.2.1 — Repeat Mode Implementation با موفقیت اجرا شد.
+- حالت Repeat در Player Store به‌صورت off/one/queue پیاده‌سازی شد و Runtime Player تصمیم‌گیری پایان پخش را بر اساس این حالت انجام می‌دهد.
+- کنترل Repeat به UI Player اضافه شد و رفتار Repeat One/Queue در سطوح store و runtime تأیید شد.
+- اعتبارسنجی با regression test، lint و build وب انجام شد.

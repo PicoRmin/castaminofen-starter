@@ -64,6 +64,11 @@ export function createPlayerRuntimeController(store: PlayerState): PlayerRuntime
   };
 
   const moveToNextQueueItem = async () => {
+    if (store.repeatMode === 'one' && store.currentItem) {
+      await playItem(store.currentItem);
+      return;
+    }
+
     const nextItem = store.goToNext();
 
     if (!nextItem) {

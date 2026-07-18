@@ -1,5 +1,7 @@
 export type PlayerPlaybackStatus = 'idle' | 'loading' | 'playing' | 'paused';
 
+export type PlayerRepeatMode = 'off' | 'one' | 'queue';
+
 export type PlayableSourceType = 'episode' | 'podcast' | 'library' | 'unknown';
 
 export interface PlayableItem {
