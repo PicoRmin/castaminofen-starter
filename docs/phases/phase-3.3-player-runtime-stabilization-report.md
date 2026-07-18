@@ -10,9 +10,10 @@ Stabilize the existing Player runtime and UI behavior after the queue, repeat, a
 
 ## Implemented Work
 - Added guardrails in the Player runtime to avoid invalid transitions when no queue exists or no audio source is available.
-- Made playback start/error paths clearer by surfacing meaningful runtime errors instead of leaving the state ambiguous.
+- Hardened playback transitions for stale async operations, repeated load calls, play/pause during loading, and invalid current item state.
+- Improved previous/next boundary handling and repeat-mode symmetry without changing queue ownership or runtime boundaries.
 - Updated the compact Player UI so loading states, empty states, and errors are visible without redesigning the layout.
-- Added regression tests for missing-audio and empty-queue navigation behavior.
+- Added regression tests for missing-audio handling, replaceQueue/clearQueue behavior, rapid next/previous calls, play after pause, setCurrentTime synchronization, setVolume synchronization, and error propagation.
 
 ## Files Changed
 - apps/web/src/features/player/runtime/playerRuntime.ts

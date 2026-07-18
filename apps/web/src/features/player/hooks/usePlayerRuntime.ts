@@ -1,9 +1,5 @@
-import { useMemo } from 'react';
-import { createPlayerRuntimeController } from '../runtime/playerRuntime';
-import { usePlayerStore } from '../store/playerStore';
+import { getPlayerRuntimeController } from '../runtime/playerRuntime';
 
 export function usePlayerRuntime() {
-  const store = usePlayerStore();
-
-  return useMemo(() => createPlayerRuntimeController(store), [store]);
+  return getPlayerRuntimeController();
 }
