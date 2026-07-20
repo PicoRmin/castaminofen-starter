@@ -2,6 +2,8 @@
 
 | تاریخ | فاز | تغییرات | وضعیت |
 | --- | --- | --- | --- |
+| 2026-07-18 | Phase 3.2.4 - Player Test Infrastructure Foundation | Added Vitest support to the web package, enabled execution of playable Player runtime regression tests, and verified web test/lint/build success without changing runtime behavior | انجام شده |
+| 2026-07-18 | Phase 3.2.3 - Player Runtime Cleanup | Introduced singleton Player Runtime ownership, normalized PlayerProgress state to currentPosition, and fixed premature playback state mutation from setCurrentItem | انجام شده |
 | 2026-07-16 | Pre-Phase 2 - Linting | Add ESLint monorepo configuration, per-package configs, scripts and fixes; ensured TypeScript/ESLint compatibility and resolved lint warnings | انجام شده |
 | 2026-07-16 | Phase 0 - Foundation | ساختار اولیه مونو ریپو، اسکلت API و وب، فایل‌های پیکربندی و Docker Compose ایجاد شد | انجام شده |
 | 2026-07-16 | Phase 1 - Authentication | مسیرهای register، login، logout، refresh و پروفایل کاربر اضافه شد | در حال بازبینی |
@@ -45,5 +47,5 @@
 | 2026-07-18 | Phase 3.2 - Player Playback Modes Foundation Plan | Added a planning-only document for repeat/shuffle playback modes, ownership boundaries, UI scope, risks, and validation checklist for the Player feature | انجام شده |
 | 2026-07-18 | Phase 3.2.1 - Repeat Mode Implementation | Added repeat-mode support to the Player store and runtime, wired a repeat toggle into the player controls UI, and verified repeat off/one/queue behavior with regression tests and web build/lint | انجام شده |
 | 2026-07-18 | Phase 3.2.2 - Shuffle Mode MVP Implementation | Added Player-owned shuffle state and toggle actions, updated runtime next-item selection to use shuffle without mutating queue order, added a shuffle control to the existing player UI, and verified behavior with regression tests plus web lint/build | انجام شده |
-| 2026-07-18 | Phase 3.3 - Player Runtime Stabilization & UX Polish | Hardened Player runtime edge cases for empty queues and missing audio sources, improved visible loading/error/empty feedback in the compact Player UI, and verified behavior with regression tests plus web lint/build | انجام شده |
+| 2026-07-18 | Phase 3.3 - Player Runtime Stabilization & UX Polish | Hardened Player runtime edge cases for empty queues and missing audio sources, improved visible loading/error/empty feedback in the compact Player UI, added regression tests for rapid next/previous navigation, playback sync, and error propagation, and verified web lint/build | انجام شده |
 | 2026-07-18 | Phase 3.3 Audit - Player Runtime & UX Readiness Audit | Performed an audit-only review of Player runtime, store ownership, Episode boundaries, UI surface, queue/repeat/shuffle behavior, and legacy usage; concluded the Player feature is ready for the next implementation phase without code changes | انجام شده |

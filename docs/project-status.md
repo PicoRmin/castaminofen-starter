@@ -4,6 +4,8 @@
 
 ## 1. وضعیت کنونی پروژه
 - مخزن مونو-ریپو با دو اپلیکیشن اصلی در [apps/api](../apps/api) و [apps/web](../apps/web) و بسته‌های مشترک در [packages](../packages) در حال نگهداری است.
+- فاز 3.2.4 — Player Test Infrastructure Foundation با اضافه‌شدن runner رسمی Vitest و اولین تست‌های قابل اجرا برای Player Runtime تکمیل شده است.
+- فاز 3.2.3 — Player Runtime Cleanup با تکمیل بسته در این نسخه، تکمیل شده است.
 - ساختار پایه، تنظیمات TypeScript، ESLint و پیکربندی‌های توسعه برای هر اپ در دسترس است.
 - لایه‌ی foundation فرانت‌اند (design system، app shell، infrastructure و state patterns) در این نسخه پیاده‌سازی شده است.
 - ویژگی‌های MVP فعلی شامل auth، پادکست و اپیزود نیز در حال حاضر فعال و قابل‌استفاده هستند.

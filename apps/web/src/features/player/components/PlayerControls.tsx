@@ -9,9 +9,9 @@ export function PlayerControls() {
   const playerRuntime = usePlayerRuntime();
   const { currentItem, playbackStatus, isPlaying, queue, currentIndex, repeatMode, shuffleEnabled, toggleRepeat, toggleShuffle } = usePlayerState();
 
-  const canGoPrevious = currentIndex > 0;
-  const canGoNext = currentIndex >= 0 && queue.length > 0 && (repeatMode === 'queue' || shuffleEnabled || currentIndex < queue.length - 1);
   const hasPlayableItem = Boolean(currentItem?.audioUrl);
+  const canGoPrevious = currentIndex >= 0 && queue.length > 0 && Boolean(currentItem?.audioUrl) && (currentIndex > 0 || repeatMode === 'queue');
+  const canGoNext = currentIndex >= 0 && queue.length > 0 && Boolean(currentItem?.audioUrl) && (repeatMode === 'queue' || shuffleEnabled || currentIndex < queue.length - 1);
 
   const handleTogglePlayback = async () => {
     if (!currentItem?.audioUrl) {
@@ -25,6 +25,10 @@ export function PlayerControls() {
 
     if (playbackStatus === 'paused') {
       await playerRuntime.play();
+      return;
+    }
+
+    if (playbackStatus === 'loading') {
       return;
     }
 
@@ -66,7 +70,7 @@ export function PlayerControls() {
         size="sm"
         className="h-10 w-10 rounded-full p-0"
         onClick={handleStop}
-        disabled={!hasPlayableItem}
+        disabled={!hasPlayableItem || playbackStatus === 'idle'}
         aria-label="Stop playback"
       >
         <Square size={14} />

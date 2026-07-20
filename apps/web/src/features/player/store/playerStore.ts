@@ -46,11 +46,6 @@ export const usePlayerStore = create<PlayerState>((set) => ({
       currentItem: item,
       queue: state.queue.length ? state.queue : [item],
       currentIndex: state.queue.length ? state.currentIndex : 0,
-      isPlaying: true,
-      playbackStatus: 'playing',
-      currentPosition: 0,
-      duration: 0,
-      error: null,
     })),
   setPlaybackState: (state) =>
     set((currentState) => {
@@ -155,11 +150,17 @@ export const usePlayerStore = create<PlayerState>((set) => ({
     let previousItem: PlayableItem | null = null;
 
     set((state) => {
-      if (!state.queue.length || state.currentIndex <= 0) {
+      if (!state.queue.length) {
         return state;
       }
 
-      const targetIndex = state.currentIndex - 1;
+      const isAtStart = state.currentIndex <= 0;
+      const canWrap = state.repeatMode === 'queue' && isAtStart && state.queue.length > 1;
+      if (!canWrap && isAtStart) {
+        return state;
+      }
+
+      const targetIndex = canWrap ? state.queue.length - 1 : state.currentIndex - 1;
       previousItem = state.queue[targetIndex] ?? null;
 
       return {
