@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import { Vazirmatn } from 'next/font/google';
 import './globals.css';
 import { AppProviders } from '@/providers/app-providers';
@@ -48,29 +48,21 @@ const themeBootstrapScript = `
   })();
 `;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   let locale = defaultLocale;
-  
-  // Priority 1: Get locale from middleware header (most reliable)
+  let direction: 'rtl' | 'ltr' = 'rtl';
+
+  // Middleware sets the detected locale in x-castaminofen-locale header
   try {
     const headersList = headers();
-    const headerLocale = headersList.get('x-locale');
+    const headerLocale = headersList.get('x-castaminofen-locale');
     if (headerLocale && isSupportedLocale(headerLocale)) {
       locale = normalizeLocale(headerLocale);
+      direction = getDirection(locale);
     }
-  } catch (e) {
-    // headers() might fail in some contexts
+  } catch {
+    // continue with default
   }
-  
-  // Priority 2: Fallback to cookie if header not available
-  if (locale === defaultLocale) {
-    const cookieValue = cookies().get('castaminofen-locale')?.value;
-    if (cookieValue && isSupportedLocale(cookieValue)) {
-      locale = normalizeLocale(cookieValue);
-    }
-  }
-
-  const direction = getDirection(locale);
 
   return (
     <html lang={locale} dir={direction} className={vazirmatn.variable}>

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { normalizeLocale, isSupportedLocale } from '@/i18n/config';
+import { isSupportedLocale } from '@/i18n/config';
 
 interface LocalePrefixedLayoutProps {
   children: ReactNode;
